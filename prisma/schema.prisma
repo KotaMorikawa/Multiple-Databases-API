@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE1_URL")
+  relationMode = "prisma"
+}
+
+model m_catalog {
+  catalog_id        Int               @id @default(autoincrement())
+  name              String            @unique
+  web_pageview      Int               @default(0)
+  pdf_pageview      Int               @default(0)
+  ranking           String?
+  open_date_from    DateTime
+  open_date_to      DateTime
+  ranking_date_from DateTime
+  ranking_date_to   DateTime
+  created_at        DateTime          @default(now())
+  updated_at        DateTime          @updatedAt
+  booksOnCatalogs   booksOnCatalogs[]
+}
+
+model booksOnCatalogs {
+  catalog    m_catalog @relation(fields: [catalog_id], references: [catalog_id], onDelete: Cascade)
+  catalog_id Int       @map("catalog_id")
+  book       m_book    @relation(fields: [book_id], references: [book_id], onDelete: Cascade)
+  book_id    Int       @map("book_id")
+
+  @@id([book_id, catalog_id])
+  @@index([catalog_id])
+  @@index([book_id])
+}
+
+model m_book {
+  first_time        DateTime          @db.DateTime(0)
+  last_time         DateTime          @db.DateTime(0)
+  valid_state       Int               @default(0) @db.TinyInt
+  book_id           Int               @id @default(autoincrement())
+  open_date         DateTime          @db.DateTime(0)
+  title             String            @db.VarChar(255)
+  original_title    String?           @db.Text
+  publisher         String            @db.VarChar(255)
+  category_id       Int
+  publication_month String?           @db.VarChar(20)
+  author            String?           @db.VarChar(255)
+  translator        String?           @db.VarChar(255)
+  cover_img         String?           @db.VarChar(255)
+  hung_in_img       String?           @db.VarChar(255)
+  book_pdf          String?           @db.VarChar(255)
+  binding_img       String?           @db.VarChar(255)
+  isbn              String?           @db.VarChar(255)
+  open_flg          Int               @db.TinyInt
+  rank_pv           Int               @default(0)
+  booksOnCatalogs   booksOnCatalogs[]
+}

@@ -1,0 +1,371 @@
+generator client {
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "rhel-openssl-1.0.x"]
+    output        = "../node_modules/@internal/prisma-second/client"
+}
+
+datasource db {
+    provider     = "mysql"
+    url          = env("DATABASE2_URL")
+    relationMode = "prisma"
+}
+
+model jct_shop {
+    book_id Int
+    shop_id Int
+    url     String @db.VarChar(300)
+
+    @@id([book_id, shop_id])
+}
+
+model m_book {
+    first_time         DateTime @db.DateTime(0)
+    last_time          DateTime @db.DateTime(0)
+    valid_state        Int      @default(0) @db.TinyInt
+    book_id            Int      @id @default(autoincrement())
+    mng_id             String?  @db.VarChar(255)
+    open_date          DateTime @db.DateTime(0)
+    title              String   @db.VarChar(255)
+    original_title     String?  @db.Text
+    subtitle           String?  @db.VarChar(255)
+    feature            String?  @db.VarChar(255)
+    mag_number         String?  @db.VarChar(255)
+    publisher          String   @db.VarChar(255)
+    genre_id1          Int
+    genre_id2          Int?
+    genre_id3          Int?
+    category_id        Int
+    publication_month  String?  @db.VarChar(20)
+    author             String?  @db.VarChar(255)
+    translator         String?  @db.VarChar(255)
+    page               String?  @db.VarChar(255)
+    cover_img          String?  @db.VarChar(255)
+    hung_in_img        String?  @db.VarChar(255)
+    book_pdf           String?  @db.VarChar(255)
+    binding_img        String?  @db.VarChar(255)
+    isbn               String?  @db.VarChar(255)
+    open_flg           Int      @db.TinyInt
+    recruit_flg        Int      @db.TinyInt
+    permit_flg         Int      @db.TinyInt
+    price              String?  @db.VarChar(20)
+    index              String?  @db.Text
+    point              String?  @db.Text
+    headline1          String?  @db.VarChar(255)
+    headline2          String?  @db.VarChar(255)
+    headline3          String?  @db.VarChar(255)
+    headline4          String?  @db.VarChar(255)
+    headline5          String?  @db.VarChar(255)
+    content1           String?  @db.Text
+    content2           String?  @db.Text
+    content3           String?  @db.Text
+    content4           String?  @db.Text
+    content5           String?  @db.Text
+    comment            String?  @db.Text
+    rank_pv            Int      @default(0)
+    audio_flg          Int?     @db.TinyInt
+    link_url_1         String?  @db.Text
+    link_title_1       String?  @db.Text
+    link_description_1 String?  @db.Text
+    link_image_url_1   String?  @db.Text
+    link_url_2         String?  @db.Text
+    link_title_2       String?  @db.Text
+    link_description_2 String?  @db.Text
+    link_image_url_2   String?  @db.Text
+    link_url_3         String?  @db.Text
+    link_title_3       String?  @db.Text
+    link_description_3 String?  @db.Text
+    link_image_url_3   String?  @db.Text
+    catchphrase        String?  @db.VarChar(60)
+}
+
+model m_category {
+    first_time  DateTime @db.DateTime(0)
+    last_time   DateTime @db.DateTime(0)
+    valid_state Int      @default(0) @db.TinyInt
+    category_id Int      @id @default(autoincrement())
+    name        String   @db.VarChar(255)
+    priority    Int
+}
+
+model m_genre {
+    first_time  DateTime @db.DateTime(0)
+    last_time   DateTime @db.DateTime(0)
+    valid_state Int      @default(0) @db.TinyInt
+    genre_id    Int      @id @default(autoincrement())
+    name        String   @db.VarChar(255)
+    priority    Int
+}
+
+model m_shop {
+    first_time   DateTime @db.DateTime(0)
+    last_time    DateTime @db.DateTime(0)
+    valid_state  Int      @default(0) @db.TinyInt
+    shop_id      Int      @id @default(autoincrement())
+    name         String   @db.VarChar(255)
+    url_template String   @db.VarChar(300)
+    priority     Int
+}
+
+model t_ac_log {
+    first_time  DateTime @db.DateTime(0)
+    log_id      Int      @id @default(autoincrement())
+    client_id   Int
+    account_id  Int
+    ip_addr     String   @db.VarChar(255)
+    page        String?  @db.VarChar(255)
+    book_id     Int?
+    category_id Int?
+    genre_id    Int?
+}
+
+model t_account {
+    first_time                   DateTime  @db.DateTime(0)
+    last_time                    DateTime  @db.DateTime(0)
+    valid_state                  Int       @default(0) @db.TinyInt
+    account_id                   Int       @id @default(autoincrement())
+    client_id                    Int?
+    auth_type                    Int       @db.TinyInt
+    user_id                      String    @db.VarChar(255)
+    password                     String?   @db.VarChar(50)
+    ip_addr_start                String?   @db.VarChar(50)
+    ip_addr_end                  String?   @db.VarChar(50)
+    token_key                    String?   @db.VarChar(32)
+    email                        String?   @db.VarChar(255)
+    admin_flg                    Int       @default(0) @db.TinyInt
+    pv_total                     Int       @default(0)
+    department                   String?   @db.VarChar(50)
+    department_class             Int?      @db.TinyInt
+    position                     String?   @db.VarChar(50)
+    position_class               Int?      @db.TinyInt
+    last_name                    String?   @db.VarChar(50)
+    first_name                   String?   @db.VarChar(50)
+    last_name_kana               String?   @db.VarChar(50)
+    first_name_kana              String?   @db.VarChar(50)
+    share_flg                    Int       @default(0) @db.TinyInt
+    digest_start                 DateTime? @db.DateTime(0)
+    service_end                  DateTime? @db.DateTime(0)
+    change_email_email           String?   @db.VarChar(255)
+    change_email_token           String?   @db.VarChar(50)
+    change_email_token_expire    DateTime? @db.DateTime(0)
+    change_password_token        String?   @db.VarChar(50)
+    change_password_token_expire DateTime? @db.DateTime(0)
+    shared_notice_flg            Int       @default(0) @db.TinyInt
+    shared_notice_time           DateTime? @db.DateTime(0)
+
+    @@index([first_time], map: "first_time_index")
+    @@index([user_id], map: "user_id_index")
+}
+
+model t_account_log_daily {
+    first_time         DateTime @db.DateTime(0)
+    last_time          DateTime @db.DateTime(0)
+    account_id         Int
+    access_date        DateTime @db.Date
+    mail_num           Int      @default(0)
+    mail_open_num      Int      @default(0)
+    pv_total           Int      @default(0)
+    pv_book            Int      @default(0)
+    genre_mypage_total String?  @db.Text
+
+    @@id([account_id, access_date])
+}
+
+model t_admin {
+    first_time  DateTime @db.DateTime(0)
+    last_time   DateTime @db.DateTime(0)
+    valid_state Int      @default(0) @db.TinyInt
+    admin_id    Int      @id @default(autoincrement())
+    login_id    String   @db.VarChar(100)
+    password    String   @db.VarChar(32)
+    memo        String?  @db.Text
+    role        Int      @default(0) @db.TinyInt
+}
+
+model t_book_action_account_num {
+    first_time            DateTime @db.DateTime(0)
+    last_time             DateTime @db.DateTime(0)
+    account_id            Int
+    book_id               Int
+    access_date           DateTime @db.Date
+    pv_total              Int      @default(0)
+    later_total           Int      @default(0)
+    memo_total            Int      @default(0)
+    share_total           Int      @default(0)
+    share_execution_total Int      @default(0)
+
+    @@id([account_id, book_id, access_date])
+    @@index([access_date, account_id], map: "idx_1_t_book_action_account_num")
+    @@index([book_id], map: "idx_2_t_book_action_account_num")
+}
+
+model t_book_later {
+    first_time    DateTime @db.DateTime(0)
+    last_time     DateTime @db.DateTime(0)
+    valid_state   Int      @default(0) @db.TinyInt
+    book_later_id Int      @id @default(autoincrement())
+    book_id       Int
+    account_id    Int
+
+    @@index([book_id, account_id], map: "index_book_id")
+}
+
+model t_book_memo {
+    first_time   DateTime @db.DateTime(0)
+    last_time    DateTime @db.DateTime(0)
+    valid_state  Int      @default(0) @db.TinyInt
+    book_memo_id Int      @id @default(autoincrement())
+    book_id      Int
+    account_id   Int
+    label        String?  @db.VarChar(50)
+    memo         String?  @db.Text
+
+    @@index([book_id, account_id], map: "index_book_id")
+}
+
+model t_book_share {
+    first_time      DateTime @db.DateTime(0)
+    last_time       DateTime @db.DateTime(0)
+    valid_state     Int      @default(0) @db.TinyInt
+    share_id        Int      @id @default(autoincrement())
+    book_id         Int
+    account_id_from Int
+    memo            String?  @db.Text
+}
+
+model t_book_share_accounts {
+    first_time    DateTime  @db.DateTime(0)
+    last_time     DateTime  @db.DateTime(0)
+    valid_state   Int       @default(0) @db.TinyInt
+    share_id      Int
+    account_id_to Int
+    check_state   Int       @default(0) @db.TinyInt
+    check_time    DateTime? @db.DateTime(0)
+    good_state    Int       @default(0) @db.TinyInt
+
+    @@id([share_id, account_id_to])
+    @@index([account_id_to], map: "account_id_to")
+}
+
+model t_book_view_client_daily {
+    first_time  DateTime @db.DateTime(0)
+    last_time   DateTime @db.DateTime(0)
+    client_id   Int
+    access_date DateTime @db.Date
+    book_id     Int
+    pv_total    Int      @default(0)
+
+    @@id([client_id, access_date, book_id])
+}
+
+model t_client {
+    first_time           DateTime  @db.DateTime(0)
+    last_time            DateTime  @db.DateTime(0)
+    valid_state          Int       @default(0) @db.TinyInt
+    client_id            Int       @id @default(autoincrement())
+    contract_id          String?   @db.VarChar(70)
+    type                 Int       @default(0) @db.TinyInt
+    name                 String?   @db.VarChar(100)
+    post                 String?   @db.VarChar(100)
+    use_start            DateTime  @db.DateTime(0)
+    use_end              DateTime? @db.DateTime(0)
+    use_state            Int       @default(0) @db.TinyInt
+    account_num          Int       @default(0)
+    share_flg            Int       @default(0) @db.TinyInt
+    mail_type            Int       @db.TinyInt
+    user_mail_edit_flg   Int       @default(0) @db.TinyInt
+    enquete_flg          Int       @default(0) @db.TinyInt
+    h_banner1_img        String?   @db.VarChar(100)
+    h_banner1_url        String?   @db.VarChar(300)
+    h_banner2_img        String?   @db.VarChar(100)
+    h_banner2_url        String?   @db.VarChar(300)
+    logo_img             String?   @db.VarChar(100)
+    logo_url             String?   @db.VarChar(300)
+    pdf_dl_flg           Int       @default(0) @db.TinyInt
+    business_class       Int?      @db.TinyInt
+    update_txt           String?   @db.Text
+    custom_mail_flg      Int       @default(0) @db.TinyInt
+    custom_header        String?   @db.Text
+    custom_footer        String?   @db.Text
+    ip_auth_flg          Int       @default(0) @db.TinyInt
+    ip_auth_addr_json    Json?
+    user_admin_maint_flg Int       @default(0) @db.TinyInt
+    user_admin_maint_msg String?   @db.Text
+
+    @@index([contract_id], map: "index_contract_id")
+    @@index([name], map: "index_name")
+}
+
+model t_config {
+    first_time DateTime @db.DateTime(0)
+    last_time  DateTime @db.DateTime(0)
+    key        String   @id @db.Char(50)
+    value      String   @db.Text
+}
+
+model t_enq_answer {
+    first_time DateTime @db.DateTime(0)
+    last_time  DateTime @db.DateTime(0)
+    account_id Int
+    book_id    Int
+    choice_id  Int?
+
+    @@id([account_id, book_id])
+    @@index([book_id], map: "idx_1_t_enq_answer")
+}
+
+model t_job {
+    first_time  DateTime @db.DateTime(0)
+    last_time   DateTime @db.DateTime(0)
+    valid_state Int      @default(0) @db.TinyInt
+    job_id      String   @id @db.VarChar(50)
+    progress    Int      @default(0) @db.TinyInt
+    function    String   @db.VarChar(200)
+    input       String?  @db.Text
+    output      String?  @db.Text
+    remark      String?  @db.Text
+}
+
+model t_mail_contents {
+    first_time          DateTime  @db.DateTime(0)
+    last_time           DateTime  @db.DateTime(0)
+    valid_state         Int       @default(0) @db.TinyInt
+    mail_id             Int       @id @default(autoincrement())
+    mail_type           Int       @db.TinyInt
+    mail_category       Int       @db.TinyInt
+    mail_to             Int       @db.TinyInt
+    client_id           Int?
+    book_id             Int       @default(0)
+    status              Int       @default(0) @db.TinyInt
+    reservation_at      DateTime? @db.DateTime(0)
+    queued_count        Int       @default(0)
+    sent_count          Int       @default(0)
+    opened_count        Int       @default(0)
+    error_count         Int       @default(0)
+    title               String    @default("") @db.VarChar(255)
+    body_html           String?   @db.Text
+    body_text_like_html String?   @db.Text
+    body_text           String?   @db.Text
+
+    @@index([status, reservation_at], map: "idx_1_t_mail_contents")
+}
+
+model t_mail_distribution {
+    first_time DateTime @db.DateTime(0)
+    last_time  DateTime @db.DateTime(0)
+    id         Int      @id @default(autoincrement())
+    mail_id    Int
+    account_id Int
+    email      String   @db.VarChar(255)
+    status     Int      @default(0) @db.TinyInt
+    open_flg   Int      @default(0) @db.TinyInt
+
+    @@index([mail_id, status], map: "idx_1_t_mail_distribution")
+}
+
+model t_mail_status {
+    first_time DateTime @db.DateTime(0)
+    last_time  DateTime @db.DateTime(0)
+    email      String   @id @db.VarChar(255)
+    status     Int      @default(0) @db.TinyInt
+    last_event String   @default("") @db.VarChar(50)
+}
