@@ -80,14 +80,14 @@ export class MCatalogService {
       throw new NotFoundException('Not found books');
     }
 
-    return this.prisma.$transaction(async () => {
-      this.prisma.booksOnCatalogs.deleteMany({
+    const updatedMCatalog = await this.prisma.$transaction(async (prisma) => {
+      await prisma.booksOnCatalogs.deleteMany({
         where: {
           catalog_id: id,
         },
       });
 
-      this.prisma.m_catalog.update({
+      return await prisma.m_catalog.update({
         where: {
           catalog_id: id,
         },
@@ -105,8 +105,24 @@ export class MCatalogService {
             }),
           },
         },
+        select: {
+          catalog_id: true,
+          name: true,
+          web_pageview: true,
+          pdf_pageview: true,
+          ranking: true,
+          open_date_from: true,
+          open_date_to: true,
+          ranking_date_from: true,
+          ranking_date_to: true,
+          created_at: true,
+          updated_at: true,
+          booksOnCatalogs: true,
+        },
       });
     });
+
+    return updatedMCatalog;
   }
 
   remove(id: number) {

@@ -6,6 +6,11 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { createServer, proxy } from '@vendia/serverless-express';
 import { eventContext } from '@vendia/serverless-express/middleware';
 import { Handler, Context } from 'aws-lambda';
+import { ValidationPipe } from '@nestjs/common';
+import {
+  PrismaClientExceptionFilter,
+  PrismaSecondClientExceptionFilter,
+} from './prisma-client-exception/prisma-client-exception.filter';
 
 const binaryMimeTypes: string[] = [];
 
@@ -20,7 +25,12 @@ const bootstrapServer = async (module: any): Promise<Server> => {
       module,
       new ExpressAdapter(expressApp),
     );
+    nestApp.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     nestApp.enableCors();
+    nestApp.useGlobalFilters(
+      new PrismaClientExceptionFilter(),
+      new PrismaSecondClientExceptionFilter(),
+    );
     nestApp.use(eventContext());
     await nestApp.init();
     cachedServer = createServer(expressApp, undefined, binaryMimeTypes);
