@@ -98,6 +98,7 @@ export class MCatalogService {
           catalog_id: id,
         },
         data: {
+          name: updateMCatalogDto.name,
           open_date_from: importFrom,
           open_date_to: importTo,
           ranking_date_from: rankingFrom,
