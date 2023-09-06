@@ -8,9 +8,12 @@ export class MCatalogService {
   constructor(private prisma: PrismaService) {}
 
   async create(createMCatalogDto: CreateMCatalogDto) {
-    const importFrom = new Date(createMCatalogDto.openDateFrom);
-    const importTo = new Date(createMCatalogDto.openDateTo);
+    const importFrom = new Date(createMCatalogDto.open_date_from + 'Z');
+    const importTo = new Date(createMCatalogDto.open_date_to + 'Z');
+    const rankingFrom = new Date(createMCatalogDto.ranking_date_from + 'Z');
+    const rankingTo = new Date(createMCatalogDto.ranking_date_to + 'Z');
     importTo.setUTCHours(23, 59, 59, 999); //End of Day time
+    rankingTo.setUTCHours(23, 59, 59, 999);
 
     const bookIds = await this.prisma.m_book.findMany({
       where: {
@@ -24,7 +27,7 @@ export class MCatalogService {
       },
     });
 
-    if (!bookIds) {
+    if (bookIds.length == 0) {
       throw new NotFoundException('Not found books');
     }
 
@@ -33,8 +36,8 @@ export class MCatalogService {
         name: createMCatalogDto.name,
         open_date_from: importFrom,
         open_date_to: importTo,
-        ranking_date_from: new Date(createMCatalogDto.ranking_date_from),
-        ranking_date_to: new Date(createMCatalogDto.ranking_date_to),
+        ranking_date_from: rankingFrom,
+        ranking_date_to: rankingTo,
         ranking: createMCatalogDto.ranking,
         booksOnCatalogs: {
           create: bookIds.map((bookId: { book_id: number }) => {
@@ -60,9 +63,12 @@ export class MCatalogService {
   }
 
   async update(id: number, updateMCatalogDto: UpdateMCatalogDto) {
-    const importFrom = new Date(updateMCatalogDto.openDateFrom);
-    const importTo = new Date(updateMCatalogDto.openDateTo);
+    const importFrom = new Date(updateMCatalogDto.open_date_from + 'Z');
+    const importTo = new Date(updateMCatalogDto.open_date_to + 'Z');
+    const rankingFrom = new Date(updateMCatalogDto.ranking_date_from + 'Z');
+    const rankingTo = new Date(updateMCatalogDto.ranking_date_to + 'Z');
     importTo.setUTCHours(23, 59, 59, 999); //End of Day time
+    rankingTo.setUTCHours(23, 59, 59, 999);
 
     const bookIds = await this.prisma.m_book.findMany({
       where: {
@@ -94,8 +100,8 @@ export class MCatalogService {
         data: {
           open_date_from: importFrom,
           open_date_to: importTo,
-          ranking_date_from: new Date(updateMCatalogDto.ranking_date_from),
-          ranking_date_to: new Date(updateMCatalogDto.ranking_date_to),
+          ranking_date_from: rankingFrom,
+          ranking_date_to: rankingTo,
           ranking: updateMCatalogDto.ranking,
           booksOnCatalogs: {
             create: bookIds.map((bookId: { book_id: number }) => {

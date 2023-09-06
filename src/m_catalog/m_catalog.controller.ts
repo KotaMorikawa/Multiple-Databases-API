@@ -52,6 +52,10 @@ export class MCatalogController {
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
+    const catalog = await this.mCatalogService.findOne(id);
+    if (!catalog) {
+      throw new NotFoundException(`Catalog with ${id} does not exist`);
+    }
     return new MCatalogEntity(await this.mCatalogService.remove(id));
   }
 }

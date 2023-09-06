@@ -38,6 +38,10 @@ export class MBookController {
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
+    const book = await this.mBookService.findOne(id);
+    if (!book) {
+      throw new NotFoundException(`Book with ${id} does not exist.`);
+    }
     return new MBookEntity(await this.mBookService.remove(id));
   }
 }

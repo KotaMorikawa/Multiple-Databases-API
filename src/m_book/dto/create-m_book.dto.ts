@@ -1,11 +1,11 @@
-import { IsDate, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMBookDto {
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
   from: Date;
 
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
   to: Date;
 }

@@ -1,23 +1,23 @@
-import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateMCatalogDto {
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
-  openDateFrom: Date;
+  open_date_from: Date;
 
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
-  openDateTo: Date;
+  open_date_to: Date;
 
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
   ranking_date_from: Date;
 
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
   ranking_date_to: Date;
 

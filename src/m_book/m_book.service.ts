@@ -11,11 +11,15 @@ export class MBookService {
   ) {}
 
   async create(createMBookDto: CreateMBookDto) {
+    const From = new Date(createMBookDto.from + 'Z');
+    const To = new Date(createMBookDto.to + 'Z');
+    To.setUTCHours(23, 59, 59, 999); //End of Day time
+
     const books = await this.prisma_second.m_book.findMany({
       where: {
         open_date: {
-          gte: new Date(createMBookDto.from),
-          lte: new Date(createMBookDto.to),
+          gte: From,
+          lte: To,
         },
       },
       select: {
