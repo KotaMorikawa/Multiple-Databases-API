@@ -62,6 +62,112 @@ export class MCatalogService {
     });
   }
 
+  count(
+    id: string | undefined,
+    name: string | undefined,
+    web_pv: string | undefined,
+    pdf_pv: string | undefined,
+  ) {
+    return this.prisma.m_catalog.aggregate({
+      where: {
+        catalog_id: id !== undefined ? { equals: Number(id) } : undefined,
+        name: name !== undefined ? { contains: name } : undefined,
+        web_pageview:
+          web_pv !== undefined ? { equals: Number(web_pv) } : undefined,
+        pdf_pageview:
+          pdf_pv !== undefined ? { equals: Number(pdf_pv) } : undefined,
+      },
+      _count: true,
+    });
+  }
+
+  list(
+    skip: number,
+    perPage: number,
+    id: string | undefined,
+    name: string | undefined,
+    web_pv: string | undefined,
+    pdf_pv: string | undefined,
+  ) {
+    return this.prisma.m_catalog.findMany({
+      skip: skip,
+      take: perPage,
+      orderBy: {
+        created_at: 'desc',
+      },
+      where: {
+        catalog_id: id !== undefined ? { equals: Number(id) } : undefined,
+        name: name !== undefined ? { contains: name } : undefined,
+        web_pageview:
+          web_pv !== undefined ? { equals: Number(web_pv) } : undefined,
+        pdf_pageview:
+          pdf_pv !== undefined ? { equals: Number(pdf_pv) } : undefined,
+      },
+      include: {
+        booksOnCatalogs: true,
+      },
+    });
+  }
+
+  frequentry() {
+    return this.prisma.m_catalog.findMany({
+      take: 10,
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+  }
+
+  async webPVCount(name: string) {
+    const existData = await this.prisma.m_catalog.findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        catalog_id: true,
+        web_pageview: true,
+      },
+    });
+
+    if (!existData) {
+      throw new NotFoundException('Not found catalog');
+    }
+
+    return this.prisma.m_catalog.update({
+      where: {
+        catalog_id: existData.catalog_id,
+      },
+      data: {
+        web_pageview: existData.web_pageview + 1,
+      },
+    });
+  }
+
+  async pdfPVCount(name: string) {
+    const existData = await this.prisma.m_catalog.findFirst({
+      where: {
+        name: name,
+      },
+      select: {
+        catalog_id: true,
+        pdf_pageview: true,
+      },
+    });
+
+    if (!existData) {
+      throw new NotFoundException('Not found catalog');
+    }
+
+    return this.prisma.m_catalog.update({
+      where: {
+        catalog_id: existData.catalog_id,
+      },
+      data: {
+        pdf_pageview: existData.pdf_pageview + 1,
+      },
+    });
+  }
+
   async update(id: number, updateMCatalogDto: UpdateMCatalogDto) {
     const importFrom = new Date(updateMCatalogDto.open_date_from + 'Z');
     const importTo = new Date(updateMCatalogDto.open_date_to + 'Z');

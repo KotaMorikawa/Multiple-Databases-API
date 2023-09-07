@@ -1,3 +1,4 @@
+import { UpdateMBookDto } from './dto/update-m_book.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMBookDto } from './dto/create-m_book.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -64,6 +65,66 @@ export class MBookService {
       where: {
         book_id: id,
       },
+    });
+  }
+
+  count(
+    id: string | undefined,
+    title: string | undefined,
+    publisher: string | undefined,
+    author: string | undefined,
+  ) {
+    return this.prisma.m_book.aggregate({
+      where: {
+        book_id: id !== undefined ? { equals: Number(id) } : undefined,
+        title: title !== undefined ? { contains: title } : undefined,
+        publisher:
+          publisher !== undefined ? { contains: publisher } : undefined,
+        author: author !== undefined ? { contains: author } : undefined,
+      },
+      _count: true,
+    });
+  }
+
+  list(
+    skip: number,
+    perPage: number,
+    id: string | undefined,
+    title: string | undefined,
+    publisher: string | undefined,
+    author: string | undefined,
+  ) {
+    return this.prisma.m_book.findMany({
+      skip: skip,
+      take: perPage,
+      orderBy: {
+        open_date: 'desc',
+      },
+      where: {
+        book_id: id !== undefined ? { equals: Number(id) } : undefined,
+        title: title !== undefined ? { contains: title } : undefined,
+        publisher:
+          publisher !== undefined ? { contains: publisher } : undefined,
+        author: author !== undefined ? { contains: author } : undefined,
+      },
+    });
+  }
+
+  frequentry() {
+    return this.prisma.m_book.findMany({
+      take: 10,
+      orderBy: {
+        open_date: 'desc',
+      },
+    });
+  }
+
+  update(id: number, updateMBookDto: UpdateMBookDto) {
+    return this.prisma.m_book.update({
+      where: {
+        book_id: id,
+      },
+      data: updateMBookDto,
     });
   }
 

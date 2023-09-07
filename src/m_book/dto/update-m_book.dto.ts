@@ -1,4 +1,23 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateMBookDto } from './create-m_book.dto';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateMBookDto extends PartialType(CreateMBookDto) {}
+export class UpdateMBookDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsString()
+  @IsNotEmpty()
+  publisher: string;
+
+  @IsString()
+  @IsNotEmpty()
+  author: string;
+
+  @IsString()
+  @IsNotEmpty()
+  cover_img: string;
+
+  @IsString()
+  @IsNotEmpty()
+  open_date: string;
+}
