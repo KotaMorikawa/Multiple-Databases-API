@@ -26,7 +26,11 @@ const bootstrapServer = async (module: any): Promise<Server> => {
       new ExpressAdapter(expressApp),
     );
     nestApp.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-    nestApp.enableCors();
+    nestApp.enableCors({
+      origin: '*',
+      allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+      credentials: true,
+    });
     nestApp.useGlobalFilters(
       new PrismaClientExceptionFilter(),
       new PrismaSecondClientExceptionFilter(),

@@ -29,9 +29,21 @@ functions:
       - http:
           method: ANY
           path: /
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
       - http:
           method: ANY
           path: '{proxy+}'
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
 
 package:
   patterns:
