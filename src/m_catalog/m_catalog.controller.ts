@@ -60,6 +60,11 @@ export class MCatalogController {
     return this.mCatalogService.frequentry();
   }
 
+  @Get('Name')
+  name(@Query('key') key: string) {
+    return this.mCatalogService.findName(key);
+  }
+
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const catalog = await this.mCatalogService.findOne(id);

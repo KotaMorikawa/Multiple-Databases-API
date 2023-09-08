@@ -59,6 +59,28 @@ export class MCatalogService {
       where: {
         catalog_id: id,
       },
+      include: {
+        booksOnCatalogs: {
+          include: {
+            book: true,
+          },
+        },
+      },
+    });
+  }
+
+  findName(key: string) {
+    return this.prisma.m_catalog.findFirst({
+      where: {
+        name: key,
+      },
+      include: {
+        booksOnCatalogs: {
+          include: {
+            book: true,
+          },
+        },
+      },
     });
   }
 
