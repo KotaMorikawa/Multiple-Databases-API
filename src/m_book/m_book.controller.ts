@@ -14,6 +14,7 @@ import { MBookService } from './m_book.service';
 import { CreateMBookDto } from './dto/create-m_book.dto';
 import { MBookEntity } from './entities/m_book.entity';
 import { UpdateMBookDto } from './dto/update-m_book.dto';
+import { ParseIntNullPipe } from 'src/custom-pipes/ParseIntNullPipe';
 
 @Controller('m-book')
 export class MBookController {
@@ -32,7 +33,7 @@ export class MBookController {
 
   @Get('Count')
   count(
-    @Query('id') id: string | undefined,
+    @Query('id', ParseIntNullPipe) id: number | undefined,
     @Query('title') title: string | undefined,
     @Query('publisher') publisher: string | undefined,
     @Query('author') author: string | undefined,
@@ -44,7 +45,7 @@ export class MBookController {
   list(
     @Query('skip', ParseIntPipe) skip: number,
     @Query('perPage', ParseIntPipe) perPage: number,
-    @Query('id') id: string | undefined,
+    @Query('id', ParseIntNullPipe) id: number | undefined,
     @Query('title') title: string | undefined,
     @Query('publisher') publisher: string | undefined,
     @Query('author') author: string | undefined,

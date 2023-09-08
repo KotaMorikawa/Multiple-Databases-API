@@ -69,14 +69,14 @@ export class MBookService {
   }
 
   count(
-    id: string | undefined,
+    id: number | undefined,
     title: string | undefined,
     publisher: string | undefined,
     author: string | undefined,
   ) {
     return this.prisma.m_book.aggregate({
       where: {
-        book_id: id !== undefined ? { equals: Number(id) } : undefined,
+        book_id: id !== undefined ? { equals: id } : undefined,
         title: title !== undefined ? { contains: title } : undefined,
         publisher:
           publisher !== undefined ? { contains: publisher } : undefined,
@@ -89,7 +89,7 @@ export class MBookService {
   list(
     skip: number,
     perPage: number,
-    id: string | undefined,
+    id: number | undefined,
     title: string | undefined,
     publisher: string | undefined,
     author: string | undefined,
@@ -101,7 +101,7 @@ export class MBookService {
         open_date: 'desc',
       },
       where: {
-        book_id: id !== undefined ? { equals: Number(id) } : undefined,
+        book_id: id !== undefined ? { equals: id } : undefined,
         title: title !== undefined ? { contains: title } : undefined,
         publisher:
           publisher !== undefined ? { contains: publisher } : undefined,

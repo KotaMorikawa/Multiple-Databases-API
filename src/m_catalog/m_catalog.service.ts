@@ -63,19 +63,17 @@ export class MCatalogService {
   }
 
   count(
-    id: string | undefined,
+    id: number | undefined,
     name: string | undefined,
-    web_pv: string | undefined,
-    pdf_pv: string | undefined,
+    web_pv: number | undefined,
+    pdf_pv: number | undefined,
   ) {
     return this.prisma.m_catalog.aggregate({
       where: {
-        catalog_id: id !== undefined ? { equals: Number(id) } : undefined,
+        catalog_id: id !== undefined ? { equals: id } : undefined,
         name: name !== undefined ? { contains: name } : undefined,
-        web_pageview:
-          web_pv !== undefined ? { equals: Number(web_pv) } : undefined,
-        pdf_pageview:
-          pdf_pv !== undefined ? { equals: Number(pdf_pv) } : undefined,
+        web_pageview: web_pv !== undefined ? { equals: web_pv } : undefined,
+        pdf_pageview: pdf_pv !== undefined ? { equals: pdf_pv } : undefined,
       },
       _count: true,
     });
@@ -84,10 +82,10 @@ export class MCatalogService {
   list(
     skip: number,
     perPage: number,
-    id: string | undefined,
+    id: number | undefined,
     name: string | undefined,
-    web_pv: string | undefined,
-    pdf_pv: string | undefined,
+    web_pv: number | undefined,
+    pdf_pv: number | undefined,
   ) {
     return this.prisma.m_catalog.findMany({
       skip: skip,
@@ -96,12 +94,10 @@ export class MCatalogService {
         created_at: 'desc',
       },
       where: {
-        catalog_id: id !== undefined ? { equals: Number(id) } : undefined,
+        catalog_id: id !== undefined ? { equals: id } : undefined,
         name: name !== undefined ? { contains: name } : undefined,
-        web_pageview:
-          web_pv !== undefined ? { equals: Number(web_pv) } : undefined,
-        pdf_pageview:
-          pdf_pv !== undefined ? { equals: Number(pdf_pv) } : undefined,
+        web_pageview: web_pv !== undefined ? { equals: web_pv } : undefined,
+        pdf_pageview: pdf_pv !== undefined ? { equals: pdf_pv } : undefined,
       },
       include: {
         booksOnCatalogs: true,

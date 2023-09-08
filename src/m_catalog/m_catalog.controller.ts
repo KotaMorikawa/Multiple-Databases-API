@@ -14,6 +14,7 @@ import {
 import { MCatalogService } from './m_catalog.service';
 import { CreateMCatalogDto } from './dto/create-m_catalog.dto';
 import { UpdateMCatalogDto } from './dto/update-m_catalog.dto';
+import { ParseIntNullPipe } from 'src/custom-pipes/ParseIntNullPipe';
 
 @Controller('m-catalog')
 export class MCatalogController {
@@ -34,10 +35,10 @@ export class MCatalogController {
 
   @Get('Count')
   count(
-    @Query('id') id: string,
-    @Query('name') name: string,
-    @Query('web_pv') web_pv: string,
-    @Query('pdf_pv') pdf_pv: string,
+    @Query('id', ParseIntNullPipe) id: number | undefined,
+    @Query('name') name: string | undefined,
+    @Query('web_pv', ParseIntNullPipe) web_pv: number | undefined,
+    @Query('pdf_pv', ParseIntNullPipe) pdf_pv: number | undefined,
   ) {
     return this.mCatalogService.count(id, name, web_pv, pdf_pv);
   }
@@ -46,10 +47,10 @@ export class MCatalogController {
   list(
     @Query('skip', ParseIntPipe) skip: number,
     @Query('perPage', ParseIntPipe) perPage: number,
-    @Query('id') id: string,
-    @Query('name') name: string,
-    @Query('web_pv') web_pv: string,
-    @Query('pdf_pv') pdf_pv: string,
+    @Query('id', ParseIntNullPipe) id: number | undefined,
+    @Query('name') name: string | undefined,
+    @Query('web_pv', ParseIntNullPipe) web_pv: number | undefined,
+    @Query('pdf_pv', ParseIntNullPipe) pdf_pv: number | undefined,
   ) {
     return this.mCatalogService.list(skip, perPage, id, name, web_pv, pdf_pv);
   }
